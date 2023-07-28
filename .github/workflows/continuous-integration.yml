@@ -1,0 +1,36 @@
+name: Continuous integration
+
+on: push
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout
+      - uses: actions/cache@v3
+        name: Cache dependencies
+        with:
+          path: node_modules
+          key: npm-${{ hashFiles('package-lock.json') }}
+      - run: npm install
+        name: Install dependencies
+      - run: npm run test
+        name: Run tests
+
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout
+      - uses: actions/cache@v3
+        name: Cache dependencies
+        with:
+          path: node_modules
+          key: npm-${{ hashFiles('package-lock.json') }}
+      - run: npm install
+        name: Install dependencies
+      - run: npm run lint
+        name: Check ESLint
+      - run: npm run prettier:check
+        name: Check Prettier
